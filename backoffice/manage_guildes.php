@@ -12,6 +12,10 @@ $guildes = $pdo->query("SELECT * FROM guildes")->fetchAll(PDO::FETCH_ASSOC);
 $factions = $pdo->query("SELECT * FROM factions")->fetchAll(PDO::FETCH_ASSOC);
 $heroes = $pdo->query("SELECT * FROM heros")->fetchAll(PDO::FETCH_ASSOC);
 
+usort($guildes, function ($a, $b) {
+    return $b['id'] <=> $a['id'];
+});
+
 // Gestion des actions (ajout/modification)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = $_POST['id'] ?? null;

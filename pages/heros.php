@@ -46,7 +46,7 @@ $races = $pdo->query("SELECT id, name FROM races")->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <!-- Liste des héros -->
-    <div class="grid grid-cols-5 gap-6 justify-center px-10">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 px-4 md:px-10">
         <?php foreach ($heros as $hero) : ?>
             <a href="hero.php?id=<?= $hero['id'] ?>" 
                class="hero-card transform transition duration-300 hover:scale-105"

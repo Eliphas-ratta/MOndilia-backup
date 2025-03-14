@@ -18,7 +18,8 @@ $factions = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <!-- Liste des factions -->
-    <div class="grid grid-cols-5 gap-6 justify-center px-10">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 px-4 md:px-10">
+
         <?php foreach ($factions as $faction) : ?>
             <a href="faction.php?id=<?= $faction['id'] ?>" class="transform transition duration-300 hover:scale-105">
                 <div class="faction-card bg-neutral-900 p-4 rounded-lg shadow-lg text-center border-neutral-700 flex flex-col h-full">

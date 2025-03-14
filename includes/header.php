@@ -1,5 +1,4 @@
 <?php
-ob_start();
 session_start();
 require_once __DIR__ . '/config.php'; // Connexion à la base de données
 
@@ -29,7 +28,10 @@ if (!$isLoggedIn && !in_array($currentFile, $allowedPages)) {
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         function toggleMenu() {
-            document.getElementById("mobile-menu").classList.toggle("hidden");
+            const menu = document.getElementById("mobile-menu");
+            menu.classList.toggle("hidden");
+            menu.classList.toggle("opacity-100");
+            menu.classList.toggle("translate-y-0");
         }
     </script>
 </head>
@@ -49,14 +51,14 @@ if (!$isLoggedIn && !in_array($currentFile, $allowedPages)) {
             </svg>
         </button>
 
-        <!-- Navigation (Desktop + Mobile) -->
-        <nav class="hidden lg:flex space-x-6" id="mobile-menu">
-            <a href="<?= BASE_URL ?>pages/factions.php" class="hover:text-gray-300 block lg:inline-block">Factions</a>
-            <a href="<?= BASE_URL ?>pages/guildes.php" class="hover:text-gray-300 block lg:inline-block">Guildes</a>
-            <a href="<?= BASE_URL ?>pages/races.php" class="hover:text-gray-300 block lg:inline-block">Races</a>
-            <a href="<?= BASE_URL ?>pages/heros.php" class="hover:text-gray-300 block lg:inline-block">Héros</a>
-            <a href="<?= BASE_URL ?>pages/contextes.php" class="hover:text-gray-300 block lg:inline-block">Contextes</a>
-            <a href="<?= BASE_URL ?>pages/carte.php" class="hover:text-gray-300 block lg:inline-block">Carte</a>
+        <!-- Navigation Desktop -->
+        <nav class="hidden lg:flex space-x-6">
+            <a href="<?= BASE_URL ?>pages/factions.php" class="hover:text-gray-300">Factions</a>
+            <a href="<?= BASE_URL ?>pages/guildes.php" class="hover:text-gray-300">Guildes</a>
+            <a href="<?= BASE_URL ?>pages/races.php" class="hover:text-gray-300">Races</a>
+            <a href="<?= BASE_URL ?>pages/heros.php" class="hover:text-gray-300">Héros</a>
+            <a href="<?= BASE_URL ?>pages/contextes.php" class="hover:text-gray-300">Contextes</a>
+            <a href="<?= BASE_URL ?>pages/carte.php" class="hover:text-gray-300">Carte</a>
         </nav>
 
         <!-- Authentification -->
@@ -78,23 +80,23 @@ if (!$isLoggedIn && !in_array($currentFile, $allowedPages)) {
     </div>
 
     <!-- Menu mobile -->
-    <div id="mobile-menu" class="lg:hidden hidden bg-neutral-900 p-4 absolute top-16 left-0 w-full flex flex-col space-y-2">
-        <a href="<?= BASE_URL ?>pages/factions.php" class="hover:text-gray-300 block">Factions</a>
-        <a href="<?= BASE_URL ?>pages/guildes.php" class="hover:text-gray-300 block">Guildes</a>
-        <a href="<?= BASE_URL ?>pages/races.php" class="hover:text-gray-300 block">Races</a>
-        <a href="<?= BASE_URL ?>pages/heros.php" class="hover:text-gray-300 block">Héros</a>
-        <a href="<?= BASE_URL ?>pages/contextes.php" class="hover:text-gray-300 block">Contextes</a>
-        <a href="<?= BASE_URL ?>pages/carte.php" class="hover:text-gray-300 block">Carte</a>
+    <div id="mobile-menu" class="hidden opacity-0 translate-y-[-10px] transition-all duration-300 bg-neutral-900 p-4 absolute top-16 left-0 w-full flex flex-col space-y-2">
+        <a href="<?= BASE_URL ?>pages/factions.php" class="hover:text-gray-300">Factions</a>
+        <a href="<?= BASE_URL ?>pages/guildes.php" class="hover:text-gray-300">Guildes</a>
+        <a href="<?= BASE_URL ?>pages/races.php" class="hover:text-gray-300">Races</a>
+        <a href="<?= BASE_URL ?>pages/heros.php" class="hover:text-gray-300">Héros</a>
+        <a href="<?= BASE_URL ?>pages/contextes.php" class="hover:text-gray-300">Contextes</a>
+        <a href="<?= BASE_URL ?>pages/carte.php" class="hover:text-gray-300">Carte</a>
         
         <div class="border-t border-gray-700 mt-2 pt-2">
             <?php if (!$isLoggedIn) : ?>
-                <a href="<?= BASE_URL ?>Security/login.php" class="hover:text-gray-300 block">Connexion</a>
-                <a href="<?= BASE_URL ?>Security/register.php" class="hover:text-gray-300 block">S'inscrire</a>
+                <a href="<?= BASE_URL ?>Security/login.php" class="hover:text-gray-300">Connexion</a>
+                <a href="<?= BASE_URL ?>Security/register.php" class="hover:text-gray-300">S'inscrire</a>
             <?php else : ?>
                 <?php if ($isAdmin) : ?>
-                    <a href="<?= BASE_URL ?>backoffice/dashboard.php" class="text-red-500 font-semibold block">Backoffice</a>
+                    <a href="<?= BASE_URL ?>backoffice/dashboard.php" class="text-red-500 font-semibold">Backoffice</a>
                 <?php endif; ?>
-                <a href="<?= BASE_URL ?>Security/logout.php" class="hover:text-gray-300 block">Déconnexion</a>
+                <a href="<?= BASE_URL ?>Security/logout.php" class="hover:text-gray-300">Déconnexion</a>
             <?php endif; ?>
         </div>
     </div>

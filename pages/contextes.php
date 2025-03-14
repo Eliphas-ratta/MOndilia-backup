@@ -34,7 +34,8 @@ $heros = $pdo->query("SELECT id, name FROM heros")->fetchAll(PDO::FETCH_ASSOC);
     </div>
 
     <!-- Liste des contextes -->
-    <div class="grid grid-cols-3 gap-6 justify-center px-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-4 md:px-10">
+
         <?php foreach ($contextes as $contexte) : ?>
             <a href="contexte.php?id=<?= $contexte['id'] ?>" 
                class="contexte-card transform transition duration-300 hover:scale-105"

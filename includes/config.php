@@ -15,7 +15,7 @@ try {
 
 
 
-define('BASE_URL', 'https://mondolia.ovh/');
+
 
 define('BASE_URL', 'https://mondolia.ovh/');
 // Mets le bon chemin de ton projet

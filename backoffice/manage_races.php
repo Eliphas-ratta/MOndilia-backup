@@ -10,6 +10,11 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 // Récupération des races
 $races = $pdo->query("SELECT * FROM races")->fetchAll(PDO::FETCH_ASSOC);
 
+usort($races, function ($a, $b) {
+    return $b['id'] <=> $a['id'];
+});
+
+
 // Gestion des actions (ajout/modification)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id = $_POST['id'] ?? null;

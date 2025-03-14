@@ -34,11 +34,13 @@ if ($contexte_id) {
         <?php if (!empty($related_heroes)) : ?>
             <div class="bg-neutral-800 mt-6 p-6 rounded-lg">
                 <h2 class="text-2xl font-bold text-white mb-4 text-center">Héros liés</h2>
-                <div class="grid grid-cols-5 gap-4">
+
+                <!-- Mise en page responsive -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                     <?php foreach ($related_heroes as $hero) : ?>
                         <a href="hero.php?id=<?= $hero['id'] ?>" class="block transform transition duration-300 hover:scale-105">
                             <div class="bg-neutral-700 p-4 rounded-lg text-center cursor-pointer hover:bg-neutral-600">
-                                <img src="<?= htmlspecialchars($hero['image']) ?>" class="w-24 h-24 rounded-full mx-auto object-cover">
+                                <img src="<?= htmlspecialchars($hero['image']) ?>" class="w-32 h-32 rounded-full mx-auto object-cover">
                                 <p class="text-white font-bold mt-2"><?= htmlspecialchars($hero['name']) ?></p>
                                 <p class="text-gray-400 text-sm"><?= htmlspecialchars($hero['fonction']) ?></p>
                             </div>
@@ -47,7 +49,7 @@ if ($contexte_id) {
                 </div>
             </div>
         <?php else : ?>
-            <p class="text-white mt-6">Aucun héros lié à ce contexte.</p>
+            <p class="√text-white mt-6">Aucun héros lié à ce contexte.</p>
         <?php endif; ?>
     <?php else : ?>
         <p class="text-white text-center">Contexte non trouvé.</p>
@@ -55,3 +57,4 @@ if ($contexte_id) {
 </div>
 
 <?php require_once '../includes/footer.php'; ?>
+
