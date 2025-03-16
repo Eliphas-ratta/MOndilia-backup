@@ -54,3 +54,8 @@ Contexte :
 titre = varchar(255) 
 description = text
 hero = int (peut en avoir plusieurs)
+
+pour rajouter les drapeaux :
+
+ALTER TABLE `factions`
+ADD `flag` VARCHAR(255) NULL AFTER `image`;

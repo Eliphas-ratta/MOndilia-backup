@@ -1,8 +1,6 @@
 <?php
 require_once '../includes/header.php'; 
 
-
-
 // Vérifier si l'utilisateur est admin
 if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
     header("Location: ../index.php");
@@ -12,10 +10,6 @@ if (!isset($_SESSION['user_id']) || $_SESSION['role'] !== 'admin') {
 // Récupération des factions et des héros
 $factions = $pdo->query("SELECT * FROM factions")->fetchAll(PDO::FETCH_ASSOC);
 $heroes = $pdo->query("SELECT * FROM heros")->fetchAll(PDO::FETCH_ASSOC);
-
-usort($factions, function ($a, $b) {
-    return $b['id'] <=> $a['id'];
-});
 
 // Gestion des actions (ajout/modification)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -37,18 +31,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $imagePath = $_POST['existing_image'] ?? null;
     }
 
+    // Gestion du drapeau (flag) uploadé
+    $flag = $_FILES['flag']['name'] ?? null;
+    if ($flag) {
+        $flagPath = '../img/Faction/Flags/' . basename($flag);
+        move_uploaded_file($_FILES['flag']['tmp_name'], $flagPath);
+    } else {
+        $flagPath = $_POST['existing_flag'] ?? null;
+    }
+
+
     if ($id) {
         // Modifier une faction
-        $stmt = $pdo->prepare("UPDATE factions SET name = ?, regime = ?, type = ?, couleur = ?, capitale = ?, description = ?, image = ? WHERE id = ?");
-        $stmt->execute([$name, $regime, $type, $couleur, $capitale, $description, $imagePath, $id]);
+        $stmt = $pdo->prepare("UPDATE factions SET name = ?, regime = ?, type = ?, couleur = ?, capitale = ?, description = ?, image = ?, flag = ? WHERE id = ?");
+$stmt->execute([$name, $regime, $type, $couleur, $capitale, $description, $imagePath, $flagPath, $id]);
+
 
         // Supprimer les anciennes dirigeantes
         $pdo->prepare("DELETE FROM faction_dirigeants WHERE faction_id = ?")->execute([$id]);
 
     } else {
         // Ajouter une faction
-        $stmt = $pdo->prepare("INSERT INTO factions (name, regime, type, couleur, capitale, description, image) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->execute([$name, $regime, $type, $couleur, $capitale, $description, $imagePath]);
+        $stmt = $pdo->prepare("INSERT INTO factions (name, regime, type, couleur, capitale, description, image, flag) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+$stmt->execute([$name, $regime, $type, $couleur, $capitale, $description, $imagePath, $flagPath]);
+
         $id = $pdo->lastInsertId();
     }
 
@@ -58,6 +64,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->execute([$id, $hero_id]);
     }
 
+    // Supprimer l'ancien drapeau si un nouveau est uploadé
+if ($flag && !empty($_POST['existing_flag']) && file_exists(__DIR__ . '/../' . $_POST['existing_flag'])) {
+    unlink(__DIR__ . '/../' . $_POST['existing_flag']);
+}
+
+
     header("Location: manage_factions.php");
     exit();
 }
@@ -66,7 +78,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
     $pdo->prepare("DELETE FROM factions WHERE id = ?")->execute([$id]);
-    
     header("Location: manage_factions.php");
     exit();
 }
@@ -149,6 +160,16 @@ if (isset($_GET['edit'])) {
                 <?php endif; ?>
             </div>
 
+            <div class="mt-4">
+    <label class="block text-sm">Drapeau (Flag)</label>
+    <input type="file" name="flag" class="w-full p-3 bg-neutral-800 text-white rounded-md">
+    <?php if (!empty($selectedFaction['flag'])) : ?>
+        <img src="<?= $selectedFaction['flag'] ?>" alt="Faction Flag" class="mt-2 w-20 h-20 rounded-lg">
+        <input type="hidden" name="existing_flag" value="<?= $selectedFaction['flag'] ?>">
+    <?php endif; ?>
+</div>
+
+
             <button type="submit" class="mt-4 bg-green-500 text-white p-3 rounded-md w-full hover:bg-green-600">Ajouter</button>
         </form>
     </div>
@@ -166,20 +187,28 @@ if (isset($_GET['edit'])) {
             <tbody>
             <?php foreach ($factions as $faction) : ?>
     <tr class="bg-neutral-800 hover:bg-neutral-700 transition">
-        <td class="border border-neutral-700 p-3 text-center">
+        <td class="border border-neutral-700 p-3 text-center ">
             <img src="<?= $faction['image'] ?>" class="w-16 h-16 rounded-lg mx-auto">
         </td>
         <td class="border border-neutral-700 p-3"><?= $faction['name'] ?></td>
         <td class="border border-neutral-700 p-3"><?= $faction['regime'] ?></td>
         <td class="border border-neutral-700 p-3"><?= $faction['type'] ?></td>
         <td class="border border-neutral-700 p-3"><?= $faction['couleur'] ?></td>
-        <td class="border border-neutral-700 p-3"><?= $faction['capitale'] ?></td>
+        
+        <td class="border border-neutral-700 p-3 text-center">
+    <?php if (!empty($faction['flag'])) : ?>
+        <img src="<?= $faction['flag'] ?>" class="w-16 h-16 rounded-lg mx-auto">
+    <?php else : ?>
+        <span class="text-gray-400">Aucun</span>
+    <?php endif; ?>
+</td>
         <td class="border border-neutral-700 p-3 text-center">
             <div class="flex items-center justify-center space-x-2">
                 <a href="?edit=<?= $faction['id'] ?>" class="bg-yellow-500 text-white px-4 py-2 rounded hover:bg-yellow-600 transition">Modifier</a>
                 <a href="?delete=<?= $faction['id'] ?>" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition">Supprimer</a>
             </div>
         </td>
+
     </tr>
 <?php endforeach; ?>
 

@@ -1,6 +1,6 @@
 <?php
 $host = "localhost";        // Adresse du serveur MySQL local (Wamp)
-$dbname = "mondolia";     // Nom de la base de données locale
+$dbname = "mondolxsai";     // Nom de la base de données locale
 $username = "root";         // Utilisateur par défaut sur Wamp
 $password = "root";             // Mot de passe vide par défaut sur Wamp
 

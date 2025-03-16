@@ -43,9 +43,10 @@ $heros = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="container mx-auto py-10 ">
     <!-- Infos de la faction -->
-<div class="flex flex-col md:flex-row items-start gap-6">
+    <div class="flex flex-col md:flex-row items-start gap-6">
     <img src="<?= $faction['image'] ?>" alt="<?= $faction['name'] ?>" class="w-full md:w-80 md:h-80 object-cover rounded-lg">
-    <div>
+
+    <div class="flex-1">
         <h1 class="text-3xl font-bold text-red-500"><?= $faction['name'] ?></h1>
         <p class="text-white"><strong>Régime :</strong> <?= $faction['regime'] ?></p>
         <p class="text-white"><strong>Type :</strong> <?= $faction['type'] ?></p>
@@ -53,7 +54,22 @@ $heros = $stmt->fetchAll(PDO::FETCH_ASSOC);
         <p class="text-white"><strong>Capitale :</strong> <?= $faction['capitale'] ?></p>
         <p class="text-white"><strong>Description :</strong> <?= $faction['description'] ?></p>
     </div>
+
+    <!-- Drapeau (Flag) -->
+    <?php if (!empty($faction['flag'])) : ?>
+        <div class="hidden md:block w-40 h-40 ml-auto">
+            <img src="<?= $faction['flag'] ?>" alt="Drapeau de <?= $faction['name'] ?>" class="w-full h-full object-cover rounded-lg border-4 border-red-500">
+        </div>
+    <?php endif; ?>
 </div>
+
+<!-- Drapeau visible uniquement sur mobile -->
+<?php if (!empty($faction['flag'])) : ?>
+    <div class="block md:hidden w-40 h-40 mx-auto my-4">
+        <img src="<?= $faction['flag'] ?>" alt="Drapeau de <?= $faction['name'] ?>" class="w-full h-full object-cover rounded-lg border-4 border-red-500">
+    </div>
+<?php endif; ?>
+
 
 
     <!-- Dirigeantes -->
